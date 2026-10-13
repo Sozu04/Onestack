@@ -329,6 +329,11 @@ def answer_mdr(q, d):
 
 def answer_refund(q, d):
     ql = q.lower()
+    if "chargeback" in ql:
+        citations = [cite(MASTER, "3.4")]
+        return make("ANSWERED",
+                    "Chargeback disputes must be raised by the customer's bank within 120 days of the transaction (clause 3.4).",
+                    citations)
     # detect hours
     hours = None
     m = re.search(r"(\d+)\s*hour", ql)
