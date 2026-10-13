@@ -251,8 +251,10 @@ def answer_settlement(q, d):
 
 def answer_mdr(q, d):
     ql = q.lower()
-    large = ("large" in ql) or ("above" in ql and "10 lakh" in ql) or ("more than" in ql and "10" in ql)
-    small = "small" in ql
+    large = any(w in ql for w in ["large", "big", "above", "more than", "greater", ">"]) 
+    small = any(w in ql for w in ["small", "tiny", "micro", "up to", "<="])
+    if "10 lakh" in ql and "up to" in ql:
+        small = True
     if not large and not small:
         if "same merchant" in ql or "same seller" in ql:
             large = True
@@ -489,7 +491,7 @@ def detect_topic(q: str) -> str:
         return "faq"
     if "refund" in ql or "chargeback" in ql:
         return "refund"
-    if "close" in ql or "closing" in ql:
+    if "close" in ql or "closing" in ql or "closure" in ql or "closed" in ql:
         return "closure"
     if "instant" in ql:
         return "instant"
