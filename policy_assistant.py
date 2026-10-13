@@ -293,8 +293,12 @@ def answer_mdr(q, d):
     if not amounts:
         # general
         cap = mdr_cap(d, is_large)
+        if circular_active(d):
+            cap_note = "cap applies as: small ₹15, large ₹25"
+        else:
+            cap_note = "single cap of ₹15 for all merchants (pre 01 Aug 2026 rule)"
         ans = (f"For {size_label} merchants as of {d.isoformat()}: UPI MDR is {rate_pct}% of transaction value, "
-               f"subject to a per-transaction cap of ₹{cap:,.0f} (cap applies as: small ₹15; large ₹25 after 01 Aug 2026). "
+               f"subject to a per-transaction cap of ₹{cap:,.0f} ({cap_note}). "
                f"GST at 18% is charged on the MDR and is not part of the cap.")
         status = "CONFLICT_RESOLVED" if circular_active(d) else "ANSWERED"
         res = ("Circular MS/2026/17 replaces master clauses 2.1 and 2.3 effective 01 Aug 2026 "
